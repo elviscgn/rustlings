@@ -26,6 +26,22 @@ enum Command {
 mod my_module {
     use super::Command;
 
+    pub fn transformer(commands: Vec<(String, Command)>) -> Vec<String> {
+        let mut result = vec![];
+        let mut index = 0;
+        for command in commands.iter() {
+            match command.1 {
+                Command::Uppercase => result.push(command.0.to_uppercase().as_str()),
+                Command::Trim => result.push(command.0.trim()),
+                Command::Append(any) => result.push(command.0+any.to_string())
+        
+            }
+            index += 1;
+        }
+
+        result
+    }
+
     // TODO: Complete the function as described above.
     // pub fn transformer(input: ???) -> ??? { ??? }
 }
@@ -39,6 +55,7 @@ mod tests {
     // TODO: What do we need to import to have `transformer` in scope?
     // use ???;
     use super::Command;
+    use super::my_module;
 
     #[test]
     fn it_works() {
@@ -48,7 +65,7 @@ mod tests {
             ("foo".to_string(), Command::Append(1)),
             ("bar".to_string(), Command::Append(5)),
         ];
-        let output = transformer(input);
+        let output: [&str; 4] = my_module::transformer(input);
 
         assert_eq!(
             output,

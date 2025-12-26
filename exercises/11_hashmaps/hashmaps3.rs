@@ -19,7 +19,12 @@ fn build_scores_table(results: &str) -> HashMap<&str, TeamScores> {
     // The name of the team is the key and its associated struct is the value.
     let mut scores = HashMap::<&str, TeamScores>::new();
 
+
+
     for line in results.lines() {
+        // France,Italy,3,1
+        
+
         let mut split_iterator = line.split(',');
         // NOTE: We use `unwrap` because we didn't deal with error handling yet.
         let team_1_name = split_iterator.next().unwrap();
@@ -27,11 +32,26 @@ fn build_scores_table(results: &str) -> HashMap<&str, TeamScores> {
         let team_1_score: u8 = split_iterator.next().unwrap().parse().unwrap();
         let team_2_score: u8 = split_iterator.next().unwrap().parse().unwrap();
 
+        let team_1 = scores.entry(team_1_name).or_insert(TeamScores { goals_scored: (0), goals_conceded: (0) });
+        team_1.goals_scored += team_1_score;
+        team_1.goals_conceded += team_2_score;
+        
+
+        let team_2 = scores.entry(team_2_name).or_insert(TeamScores { goals_scored: (0), goals_conceded: (0) });
+        team_2.goals_scored += team_2_score;
+        team_2.goals_conceded += team_1_score;
+        
+
+
+        // scores.entry(team_2_name, TeamScores { goals_scored: (team_2_score), goals_conceded: (team_1_score) });
+        
+
         // TODO: Populate the scores table with the extracted details.
         // Keep in mind that goals scored by team 1 will be the number of goals
         // conceded by team 2. Similarly, goals scored by team 2 will be the
         // number of goals conceded by team 1.
     }
+    
 
     scores
 }
@@ -74,4 +94,4 @@ England,Spain,1,0";
         assert_eq!(team.goals_scored, 0);
         assert_eq!(team.goals_conceded, 3);
     }
-}
+    }

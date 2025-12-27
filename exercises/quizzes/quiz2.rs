@@ -28,15 +28,21 @@ mod my_module {
 
     pub fn transformer(commands: Vec<(String, Command)>) -> Vec<String> {
         let mut result = vec![];
-        let mut index = 0;
-        for command in commands.iter() {
-            match command.1 {
-                Command::Uppercase => result.push(command.0.to_uppercase().as_str()),
-                Command::Trim => result.push(command.0.trim()),
-                Command::Append(any) => result.push(command.0+any.to_string())
+  
+        for (string, command) in commands.iter() {
+            match command {
+                Command::Uppercase => result.push(string.to_uppercase()),
+                Command::Trim => result.push(string.trim().to_owned()),
+                Command::Append(any) => {
+                    let mut owned_str = string.clone();
+                    let temp_str = "bar".repeat(*any);
+                    let borrowed_str = temp_str.as_str() ;
+                    owned_str.push_str(borrowed_str);
+                    result.push(owned_str)
+                }
         
             }
-            index += 1;
+            
         }
 
         result
@@ -65,7 +71,7 @@ mod tests {
             ("foo".to_string(), Command::Append(1)),
             ("bar".to_string(), Command::Append(5)),
         ];
-        let output: [&str; 4] = my_module::transformer(input);
+        let output = my_module::transformer(input);
 
         assert_eq!(
             output,

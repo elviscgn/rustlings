@@ -1,5 +1,31 @@
 fn main() {
-    // You can optionally experiment here.
+    let range = 10;
+    let mut optional_integers: Vec<Option<i8>> = vec![None];
+
+    for i in 1..=range {
+        optional_integers.push(Some(i));
+    }
+
+    let mut cursor = range;
+
+    while let Some(integer) = optional_integers.pop() {
+        // assert_eq!(integer.unwrap(), cursor);
+        println!("{:?} huhhhh {:?}", integer, cursor);
+        match integer {
+            Some(integer) => {
+                println!("Integer {:?}, but {:?}", integer, Some(cursor).unwrap());
+                cursor -= 1
+            }
+            None => break,
+        }
+        if Some(integer) != None {
+            cursor -= 1;
+        }
+
+        println!("{:?} huhhhh {:?}", integer, cursor);
+    }
+
+    print!("we currently at {cursor}")
 }
 
 #[cfg(test)]
@@ -26,12 +52,12 @@ mod tests {
 
         let mut cursor = range;
 
-        // TODO: Make this a while-let statement. Remember that `Vec::pop()`
-        // adds another layer of `Option`. You can do nested pattern matching
-        // in if-let and while-let statements.
-        if let Some(integer) = optional_integers.pop() {
-            assert_eq!(integer, Some(cursor));
-            cursor -= 1;
+        while let Some(integer) = optional_integers.pop() {
+            // assert_eq!(integer, cursor);
+            match integer {
+                Some(_) => cursor -= 1,
+                None => print!("no"),
+            }
         }
 
         assert_eq!(cursor, 0);

@@ -1,5 +1,5 @@
 # Re-learning Rust 🦀
 
-Progress: (67/94)
+Progress: (71/94)
 
-![](https://geps.dev/progress/71)
+![](https://geps.dev/progress/76)
